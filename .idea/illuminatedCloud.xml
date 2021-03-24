@@ -8,6 +8,7 @@
           <option name="connectionType" value="OAUTH" />
           <option name="defaultModuleName" value="cUnite_Permission_Set_Manager" />
           <option name="defaultOfficialNamespace" value="cUnite" />
+          <option name="offlineSymbolTablePath" value="$PROJECT_DIR$/IlluminatedCloud/cUnite_OrdersInvoices/OfflineSymbolTable.zip" />
         </IlluminatedCloudConnection>
       </list>
     </option>

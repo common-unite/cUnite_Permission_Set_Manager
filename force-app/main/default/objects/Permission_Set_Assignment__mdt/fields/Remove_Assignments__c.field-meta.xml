@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Remove_Assignments__c</fullName>
+    <defaultValue>false</defaultValue>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>When checked if a User does not match criteria they are removed from permission sets.</inlineHelpText>
+    <label>Remove Assignments</label>
+    <type>Checkbox</type>
+</CustomField>
