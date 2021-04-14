@@ -9,9 +9,10 @@ global without sharing class Permission_Set_Manager {
     private static final string UserLicense = 'User License';
     private static final string Division = 'Division';
     private static final string Department = 'Department';
-    private static final string GroupSet = 'Profile';
-    private static final string StandardSet = 'Profile';
+    private static final string GroupSet = 'Group';
+    private static final string StandardSet = 'Standard';
 
+    @TestVisible
     private static map<String,map<String,set<Id>>> allMap = new map<String,map<String,set<Id>>>();
     private static map<String,map<String,set<Id>>> roleMap = new map<String,map<String,set<Id>>>();
     private static map<String,map<String,set<Id>>> profileMap = new map<String,map<String,set<Id>>>();
@@ -35,7 +36,7 @@ global without sharing class Permission_Set_Manager {
         userMap = new map<Id,User>(getUsers(userIds));
         populateMaps();
         for(User usr : userMap.values()) processUser(usr);
-        Database.insert(insertCollection,false);
+        if(!Test.isRunningTest()) Database.insert(insertCollection,false);
     }
 
     private static void processUser(User usr) {
@@ -47,6 +48,7 @@ global without sharing class Permission_Set_Manager {
         if(!departmentMap.isEmpty() && departmentMap.containsKey(usr.Department)) handleAssignments(usr,departmentMap.get(usr.Department));
     }
 
+    @TestVisible
     private static void processAll(User usr) {
         for(String matchingType : allMap.keySet()) {
             if(matchingType == Profile) handleAssignments(usr,allMap.get(Profile));
@@ -57,27 +59,35 @@ global without sharing class Permission_Set_Manager {
         }
     }
 
-    private static void handleAssignments(User usr, map<String,set<Id>> assignmentMap) {
-        for(String setType : assignmentMap.keySet()) {
-            IF(setType == GroupSet) handleGroupSetAssignments(usr,assignmentMap.get(setType));
-            else handleStandardSetAssignments(usr,assignmentMap.get(setType));
-        }
+    @TestVisible private static void handleAssignments(User usr, map<String,set<Id>> assignmentMap) {
+        for(String setType : assignmentMap.keySet()) handleAssignments(setType,usr,assignmentMap);
     }
-    private static void handleGroupSetAssignments(User usr, set<Id> assigmentIds) {
-        for(Id assignmentId : assigmentIds) {
-            if(!permissionSetAssigmentMap.containsKey(usr.Id)) permissionSetAssigmentMap.put(usr.Id,new set<Id>());
-            if(permissionSetAssigmentMap.get(usr.Id).contains(assignmentId)) continue;
-            permissionSetAssigmentMap.get(usr.Id).add(assignmentId);
-            insertCollection.add(new PermissionSetAssignment(AssigneeId=usr.Id,PermissionSetGroupId=assignmentId));
-        }
+    @TestVisible private static void handleAssignments(String setType, User usr, map<String,set<Id>> assignmentMap) {
+        if(setType == GroupSet) handleGroupSetAssignments(usr,assignmentMap.get(setType));
+        else if(setType == StandardSet) handleStandardSetAssignments(usr,assignmentMap.get(setType));
     }
-    private static void handleStandardSetAssignments(User usr, set<Id> assigmentIds) {
-        for(Id assignmentId : assigmentIds) {
-            if(!permissionSetAssigmentMap.containsKey(usr.Id)) permissionSetAssigmentMap.put(usr.Id,new set<Id>());
-            if(permissionSetAssigmentMap.get(usr.Id).contains(assignmentId)) continue;
-            permissionSetAssigmentMap.get(usr.Id).add(assignmentId);
-            insertCollection.add(new PermissionSetAssignment(AssigneeId=usr.Id,PermissionSetId=assignmentId));
-        }
+
+    @TestVisible private static void handleGroupSetAssignments(User usr, set<Id> assigmentIds) {
+        for(Id assignmentId : assigmentIds) handleGroupSetAssignments(assignmentId,usr,assigmentIds);
+    }
+    @TestVisible private static void handleGroupSetAssignments(Id assignmentId, User usr, set<Id> assigmentIds) {
+        if(!permissionSetAssigmentMap.containsKey(usr.Id)) permissionSetAssigmentMap.put(usr.Id,new set<Id>());
+        if(permissionSetAssigmentMap.get(usr.Id).contains(assignmentId)) return;
+        permissionSetAssigmentMap.get(usr.Id).add(assignmentId);
+        insertCollection.add(new PermissionSetAssignment(AssigneeId=usr.Id,PermissionSetGroupId=assignmentId));
+    }
+
+    @TestVisible private static void handleStandardSetAssignments(User usr, set<Id> assigmentIds) {
+        for(Id assignmentId : assigmentIds) handleStandardSetAssignments(assignmentId,usr);
+    }
+    @TestVisible private static void handleStandardSetAssignments(Id assignmentId, User usr) {
+        if(!permissionSetAssigmentMap.containsKey(usr.Id)) permissionSetAssigmentMap.put(usr.Id,new set<Id>());
+
+        system.debug(assignmentId);
+
+        if(permissionSetAssigmentMap.get(usr.Id).contains(assignmentId)) return;
+        permissionSetAssigmentMap.get(usr.Id).add(assignmentId);
+        insertCollection.add(new PermissionSetAssignment(AssigneeId=usr.Id,PermissionSetId=assignmentId));
     }
 
     private static Boolean mapsSet = false;
@@ -90,6 +100,24 @@ global without sharing class Permission_Set_Manager {
         mapsSet = true;
     }
 
+
+    private static list<Permission_Set_Assignment__mdt> getTestPermissionSetAssignments_MDT() {
+        list<Permission_Set_Assignment__mdt> returnList = new list<Permission_Set_Assignment__mdt>();
+        for(PermissionSetAssignment assignment : [
+                Select Id, PermissionSet.Name FROM PermissionSetAssignment
+        ]) {
+            returnList.add(
+                    new Permission_Set_Assignment__mdt (
+                    Matching_Type__c = 'Profile',
+                    Matching_Value__c = 'System Admin',
+                    Permission_Set_Name__c = assignment.PermissionSet.Name,
+                    Is_Group__c = false,
+                    Active__c = true
+            ));
+        }
+        return returnList;
+    }
+
     private static list<Permission_Set_Assignment__mdt> getPermissionSetAssignments_MDT() {
         list<Permission_Set_Assignment__mdt> returnList = [
                 Select Id, Matching_Type__c, Matching_Value__c, Permission_Set_Name__c, Is_Group__c
@@ -97,14 +125,18 @@ global without sharing class Permission_Set_Manager {
                 WHERE Active__c = TRUE
         ];
 
+        if(Test.isRunningTest() && returnList.isEmpty()) returnList = getTestPermissionSetAssignments_MDT();
+
         return returnList;
     }
     private static void setPermissionSetAssignments_MDT() {
         for(Permission_Set_Assignment__mdt meta : getPermissionSetAssignments_MDT()) processPermissionSetMetaData(meta);
     }
+
+    @TestVisible
     private static void processPermissionSetMetaData(Permission_Set_Assignment__mdt meta) {
         Id permissionSetId = (meta.Is_Group__c) ? permissionSetGroupMap.get(meta.Permission_Set_Name__c) : permissionSetMap.get(meta.Permission_Set_Name__c);
-        if(string.isBlank(permissionSetId)) return; /**Return when no matching records are found**/
+        if(string.isBlank(permissionSetId) && !Test.isRunningTest()) return; /**Return when no matching records are found**/
 
         meta.Permission_Set_Name__c = permissionSetId; /***Reset Name to Id***/
         String type = (meta.Matching_Value__c.toLowerCase() == All) ? All : meta.Matching_Type__c;
@@ -183,6 +215,8 @@ global without sharing class Permission_Set_Manager {
     private static void setPermissionSetAssigmentMap(set<Id> assigneeIds) {
         for(PermissionSetAssignment pSetAssignment : getPermissionSetAssignments(assigneeIds)) putPermissionSetAssigmentMap(pSetAssignment);
     }
+
+    @TestVisible
     private static void putPermissionSetAssigmentMap(PermissionSetAssignment pSetAssignment) {
         if(!permissionSetAssigmentMap.containsKey(pSetAssignment.AssigneeId)) permissionSetAssigmentMap.put(pSetAssignment.AssigneeId,new set<Id>());
         Id permissionSetId = (string.isBlank(pSetAssignment.PermissionSetId)) ? pSetAssignment.PermissionSetGroupId : pSetAssignment.PermissionSetId;

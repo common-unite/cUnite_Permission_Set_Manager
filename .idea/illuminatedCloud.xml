@@ -4,11 +4,11 @@
     <option name="connections">
       <list>
         <IlluminatedCloudConnection>
-          <option name="connectionName" value="cUnite_OrdersInvoices" />
-          <option name="connectionType" value="OAUTH" />
+          <option name="connectionName" value="cUnite_PermissionSetManager" />
+          <option name="connectionType" value="SFDX" />
           <option name="defaultModuleName" value="cUnite_Permission_Set_Manager" />
           <option name="defaultOfficialNamespace" value="cUnite" />
-          <option name="offlineSymbolTablePath" value="$PROJECT_DIR$/IlluminatedCloud/cUnite_OrdersInvoices/OfflineSymbolTable.zip" />
+          <option name="offlineSymbolTablePath" value="$PROJECT_DIR$/IlluminatedCloud/cUnite_PermissionSetManager/OfflineSymbolTable.zip" />
         </IlluminatedCloudConnection>
       </list>
     </option>

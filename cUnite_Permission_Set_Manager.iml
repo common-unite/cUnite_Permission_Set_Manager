@@ -3,8 +3,8 @@
   <component name="FacetManager">
     <facet type="IlluminatedCloud" name="Illuminated Cloud">
       <configuration>
-        <option name="connectionName" value="cUnite_OrdersInvoices" />
-        <option name="connectionType" value="OAUTH" />
+        <option name="connectionName" value="cUnite_PermissionSetManager" />
+        <option name="connectionType" value="SFDX" />
         <option name="defaultSourceRootUrl" value="file://$MODULE_DIR$/force-app/main/default" />
       </configuration>
     </facet>
@@ -15,7 +15,7 @@
       <sourceFolder url="file://$MODULE_DIR$/config" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/force-app/main/default" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="IlluminatedCloud (cUnite_Permission_Set_Manager/cUnite_OrdersInvoices)" jdkType="IlluminatedCloud" />
+    <orderEntry type="jdk" jdkName="IlluminatedCloud (cUnite_Permission_Set_Manager/cUnite_PermissionSetManager)" jdkType="IlluminatedCloud" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

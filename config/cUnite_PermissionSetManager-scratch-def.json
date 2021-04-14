@@ -1,0 +1,11 @@
+{
+  "orgName": "cUnite_PermissionSetManager",
+  "edition": "Developer",
+  "hasSampleData": false,
+  "features": [],
+  "settings": {
+    "enhancedNotesSettings": {
+      "enableEnhancedNotes": true
+    }
+  }
+}

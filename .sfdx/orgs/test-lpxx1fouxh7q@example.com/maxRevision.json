@@ -1,0 +1,89 @@
+{
+  "serverMaxRevisionCounter": 81,
+  "sourceMembers": {
+    "ListView__Permission_Set_Assignment__mdt.All": {
+      "serverRevisionCounter": 10,
+      "lastRetrievedFromServer": 10,
+      "memberType": "ListView",
+      "isNameObsolete": false
+    },
+    "CustomField__Permission_Set_Assignment__mdt.Active__c": {
+      "serverRevisionCounter": 2,
+      "lastRetrievedFromServer": 2,
+      "memberType": "CustomField",
+      "isNameObsolete": false
+    },
+    "CustomField__Permission_Set_Assignment__mdt.Is_Group__c": {
+      "serverRevisionCounter": 3,
+      "lastRetrievedFromServer": 3,
+      "memberType": "CustomField",
+      "isNameObsolete": false
+    },
+    "CustomField__Permission_Set_Assignment__mdt.Matching_Type__c": {
+      "serverRevisionCounter": 4,
+      "lastRetrievedFromServer": 4,
+      "memberType": "CustomField",
+      "isNameObsolete": false
+    },
+    "CustomField__Permission_Set_Assignment__mdt.Matching_Value__c": {
+      "serverRevisionCounter": 5,
+      "lastRetrievedFromServer": 5,
+      "memberType": "CustomField",
+      "isNameObsolete": false
+    },
+    "CustomField__Permission_Set_Assignment__mdt.Permission_Set_Name__c": {
+      "serverRevisionCounter": 6,
+      "lastRetrievedFromServer": 6,
+      "memberType": "CustomField",
+      "isNameObsolete": false
+    },
+    "CustomField__Permission_Set_Assignment__mdt.Remove_Assignments__c": {
+      "serverRevisionCounter": 7,
+      "lastRetrievedFromServer": 7,
+      "memberType": "CustomField",
+      "isNameObsolete": false
+    },
+    "Profile__Admin": {
+      "serverRevisionCounter": 79,
+      "lastRetrievedFromServer": 79,
+      "memberType": "Profile",
+      "isNameObsolete": false
+    },
+    "Layout__Permission_Set_Assignment__mdt-Permission Set Assignment Layout": {
+      "serverRevisionCounter": 11,
+      "lastRetrievedFromServer": 11,
+      "memberType": "Layout",
+      "isNameObsolete": false
+    },
+    "CustomObject__Permission_Set_Assignment__mdt": {
+      "serverRevisionCounter": 9,
+      "lastRetrievedFromServer": 9,
+      "memberType": "CustomObject",
+      "isNameObsolete": false
+    },
+    "ApexClass__Permission_Set_Manager": {
+      "serverRevisionCounter": 74,
+      "lastRetrievedFromServer": 74,
+      "memberType": "ApexClass",
+      "isNameObsolete": false
+    },
+    "ApexClass__Permission_Set_Manager_Test": {
+      "serverRevisionCounter": 75,
+      "lastRetrievedFromServer": 75,
+      "memberType": "ApexClass",
+      "isNameObsolete": false
+    },
+    "ApexClass__Permission_Set_Manager_TDTM": {
+      "serverRevisionCounter": 80,
+      "lastRetrievedFromServer": 80,
+      "memberType": "ApexClass",
+      "isNameObsolete": false
+    },
+    "ApexClass__Permission_Set_Manager_TDTM_Test": {
+      "serverRevisionCounter": 81,
+      "lastRetrievedFromServer": 81,
+      "memberType": "ApexClass",
+      "isNameObsolete": false
+    }
+  }
+}
